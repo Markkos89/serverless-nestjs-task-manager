@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Module, OnApplicationBootstrap } from '@nestjs/common';
 import { TasksModule } from './tasks/tasks.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
+import { SeedingService } from './seeds/seeding.service';
 
 @Module({
   imports: [
@@ -31,9 +32,19 @@ import { configValidationSchema } from './config.schema';
           database: configService.get('POSTGRES_DATABASE'),
           autoLoadEntities: true,
           synchronize: true,
+          entities: ['dist/**/*.entity{.ts,.js}'],
         };
       },
     }),
   ],
+  providers: [SeedingService],
 })
-export class AppModule {}
+
+// export class AppModule {}
+export class AppModule implements OnApplicationBootstrap {
+  constructor(private readonly seedingService: SeedingService) {}
+
+  async onApplicationBootstrap(): Promise<void> {
+    await this.seedingService.seed();
+  }
+}
