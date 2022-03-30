@@ -1,4 +1,4 @@
-service: cryptostats-backend
+service: taskmanager-api
 
 useDotenv: true
 
@@ -7,7 +7,7 @@ plugins:
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   environment:
     POSTGRES_HOST: ${env:POSTGRES_HOST}
     POSTGRES_PORT: ${env:POSTGRES_PORT}
