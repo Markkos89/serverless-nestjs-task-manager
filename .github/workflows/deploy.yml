@@ -9,9 +9,18 @@ jobs:
   deploy:
     name: deploy
     runs-on: ubuntu-latest
+    env:
+      POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+      POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }} 
+      POSTGRES_USERNAME: ${{ secrets.POSTGRES_USERNAME }} 
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }} 
+      POSTGRES_DATABASE: ${{ secrets.POSTGRES_DATABASE }} 
+      JWT_SECRET: ${{ secrets.JWT_SECRET }} 
+      STAGE: ${{ secrets.STAGE }} 
     strategy:
       matrix:
         node-version: [14.x, 16.x]
+    
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
