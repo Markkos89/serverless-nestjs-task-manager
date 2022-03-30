@@ -1,0 +1,29 @@
+service: cryptostats-backend
+
+useDotenv: true
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  environment:
+    POSTGRES_HOST: ${env:POSTGRES_HOST}
+    POSTGRES_PORT: ${env:POSTGRES_PORT}
+    POSTGRES_USERNAME: ${env:POSTGRES_USERNAME}
+    POSTGRES_PASSWORD: ${env:POSTGRES_PASSWORD}
+    POSTGRES_DATABASE: ${env:POSTGRES_DATABASE}
+    STAGE: ${env:STAGE}
+    JWT_SECRET: ${env:JWT_SECRET}
+
+functions:
+  main:
+    handler: dist/serverless.handler
+    events:
+      - http:
+          method: ANY
+          path: /
+      - http:
+          method: ANY
+          path: '{proxy+}'
