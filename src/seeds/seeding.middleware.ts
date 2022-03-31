@@ -1,6 +1,6 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { TaskStatus } from 'src/tasks/task-status.entity';
+import { Status } from 'src/status/status.entity';
 import { statuses } from './data/tasks-statuses';
 // import { init_services } from 'src/txn-services/entities/txn-serv-seed-data';
 // import { TxnService } from 'src/txn-services/entities/txn-service.entity';
@@ -38,7 +38,7 @@ export class SeedingMiddleware implements NestMiddleware {
           async (transactionalEntityManager) => {
             console.log(statuses);
             for (let i = 0; i < statuses.length; i++) {
-              await transactionalEntityManager.save(TaskStatus, statuses[i]);
+              await transactionalEntityManager.save(Status, statuses[i]);
             }
             await transactionalEntityManager.save(
               new Seeding('init-txn-statuses'),

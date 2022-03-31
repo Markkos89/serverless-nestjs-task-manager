@@ -18,8 +18,8 @@ import { TasksService } from './tasks.service';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../auth/get-user-decorator';
 import { User } from '../auth/user.entity';
-import { TaskStatus } from './task-status.enum';
-import { TaskStatus as TasksStatuses } from './task-status.entity';
+// import { TaskStatus } from './task-status.enum';
+// import { StatusService } from '../status/status.service';
 @Controller('tasks')
 @UseGuards(AuthGuard())
 export class TasksController {
@@ -31,7 +31,9 @@ export class TasksController {
   declaring it with the accessor will automatically create the property in the controller class
   */
 
-  constructor(private tasksService: TasksService) {}
+  constructor(
+    private tasksService: TasksService, // private statusService: StatusService,
+  ) {}
 
   @Get()
   getTasks(
@@ -91,12 +93,5 @@ export class TasksController {
     this.logger.verbose(`User "${user.username}" deleting task with ID ${id}`);
 
     return this.tasksService.deleteTaskById(id, user);
-  }
-
-  @Get('/statuses')
-  getTasksStatuses(): Promise<TasksStatuses[]> {
-    this.logger.verbose(`User getting the list of task's statuses`);
-
-    return this.tasksService.getTasksStatuses();
   }
 }

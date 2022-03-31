@@ -1,12 +1,10 @@
+import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TasksRepository } from './tasks.repository';
-import { TasksController } from './tasks.controller';
-import { TasksService } from './tasks.service';
+import { StatusRepository } from './status.repository';
+import { StatusService } from './status.service';
 import { AuthModule } from '../auth/auth.module';
-// import { StatusService } from '../status/status.service';
-// import { StatusModule } from 'src/status/status.module';
-// import { StatusRepository } from '../status/status.repository';
+import { StatusController } from './status.controller';
 /*
 because the tasks controller is defined as a controller in this module and the
 tasks service is defined as a provider in this module and also has the @Injectable decorator,
@@ -14,9 +12,14 @@ so that allows the tasks service to be injected and then used in the tasks contr
 */
 
 @Module({
-  controllers: [TasksController],
-  providers: [TasksService],
+  controllers: [StatusController],
+  providers: [StatusService],
   // imports, injects dependencies to be able to use them anywhere inside the current module
-  imports: [TypeOrmModule.forFeature([TasksRepository]), AuthModule],
+  imports: [
+    ConfigModule,
+    TypeOrmModule.forFeature([StatusRepository]),
+    AuthModule,
+  ],
+  exports: [StatusService],
 })
-export class TasksModule {}
+export class StatusModule {}

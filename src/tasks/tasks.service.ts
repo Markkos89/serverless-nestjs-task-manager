@@ -6,8 +6,6 @@ import { TasksRepository } from './tasks.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './task.entity';
 import { User } from '../auth/user.entity';
-import { TaskStatus } from './task-status.enum';
-
 @Injectable()
 export class TasksService {
   constructor(
@@ -51,33 +49,5 @@ export class TasksService {
 
     if (!result?.affected)
       throw new NotFoundException(`Task with ID ${id} not found`);
-  }
-
-  async getTasksStatuses(): Promise<
-    [
-      { id: string; name: string; value: TaskStatus.OPEN },
-      { id: string; name: string; value: TaskStatus.IN_PROGRESS },
-      { id: string; name: string; value: TaskStatus.DONE },
-    ]
-  > {
-    return new Promise((resolve, reject) => {
-      resolve([
-        {
-          id: 'f357cc59-8169-4a78-bba6-aa4b2fe37f7d',
-          name: 'Open',
-          value: TaskStatus.OPEN,
-        },
-        {
-          id: '5a9f76ab-d0a8-421b-8354-fe6bb14ddd68',
-          name: 'In Progress',
-          value: TaskStatus.IN_PROGRESS,
-        },
-        {
-          id: 'f32ed0a9-5f23-4492-9c02-32ecaf8d92a0',
-          name: 'Done',
-          value: TaskStatus.DONE,
-        },
-      ]);
-    });
   }
 }

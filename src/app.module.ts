@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
 import { SeedingService } from './seeds/seeding.service';
+import { StatusModule } from './status/status.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { SeedingService } from './seeds/seeding.service';
       envFilePath: [`.env.stage.dev`],
       validationSchema: configValidationSchema,
     }),
+    StatusModule,
     TasksModule,
     AuthModule,
     TypeOrmModule.forRootAsync({
