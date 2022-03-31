@@ -1,27 +1,18 @@
-import { Logger } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { Status } from './status.entity';
+import { Logger } from '@nestjs/common';
 
 @EntityRepository(Status)
 export class StatusRepository extends Repository<Status> {
-  // constructor(static logger: Logger, static query: any);
-
   private logger = new Logger('StatusRepository', { timestamp: true });
 
-  async getStatuses(): Promise<any> {
-    console.log('--------------------------');
+  async getStatuses(): Promise<Status[]> {
     try {
-      const statuses = await this.query('SELECT * FROM status');
-      // this.query = await this.createQueryBuilder('task_status');
-      // const statuses = await this.query.find({ select: ['id', 'name', 'value'] });
-
-      // .getMany();
-      console.log(statuses);
+      const query = this.createQueryBuilder('task_status');
+      const statuses = await query.getMany();
       return statuses;
     } catch (e) {
-      console.log(e);
       this.logger.error(`Failed to get statuses`, e.stack);
-
       throw e;
     }
   }
