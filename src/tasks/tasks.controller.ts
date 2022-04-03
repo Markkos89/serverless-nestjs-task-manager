@@ -16,8 +16,8 @@ import { Task } from './task.entity';
 import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 import { TasksService } from './tasks.service';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from '../auth/get-user-decorator';
-import { User } from '../auth/user.entity';
+import { GetUser } from '../users/entities/get-user-decorator';
+import { User } from '../users/entities/user.entity';
 // import { TaskStatus } from './task-status.enum';
 // import { StatusService } from '../status/status.service';
 @Controller('tasks')

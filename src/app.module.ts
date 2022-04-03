@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
 import { SeedingService } from './seeds/seeding.service';
 import { StatusModule } from './status/status.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { StatusModule } from './status/status.module';
         };
       },
     }),
+    UsersModule,
   ],
   providers: [SeedingService],
 })

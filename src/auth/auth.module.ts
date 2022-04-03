@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
-import { UsersRepository } from './users.repository';
+import { UsersRepository } from '../users/users.repository';
 
 @Module({
   controllers: [AuthController],
@@ -19,12 +19,12 @@ import { UsersRepository } from './users.repository';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get('JWT_SECRET'),
-        signOptions: { expiresIn: 3600 }
-      })
+        signOptions: { expiresIn: 3600 },
+      }),
     }),
-    TypeOrmModule.forFeature([UsersRepository])
+    TypeOrmModule.forFeature([UsersRepository]),
   ],
   // exports, allows other modules that imports this one, to user this modules or providers
-  exports: [JwtStrategy, PassportModule]
+  exports: [JwtStrategy, PassportModule],
 })
-export class AuthModule { }
+export class AuthModule {}

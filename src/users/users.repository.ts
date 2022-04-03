@@ -1,14 +1,18 @@
-import { ConflictException, InternalServerErrorException, Logger } from "@nestjs/common";
-import { EntityRepository, Repository } from "typeorm";
-import { AuthCredentialsDto } from "./dto/auth-credentials.dto";
-import { User } from "./user.entity";
+import {
+  ConflictException,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
+import { EntityRepository, Repository } from 'typeorm';
+import { AuthCredentialsDto } from '../auth/dto/auth-credentials.dto';
+import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 
 @EntityRepository(User)
 export class UsersRepository extends Repository<User> {
   private logger = new Logger('UsersRepository', { timestamp: true });
 
-  async createUser(dto: AuthCredentialsDto): Promise<void> {
+  async createUser(dto: AuthCredentialsDto): Promise<User> {
     const { username, password } = dto;
 
     try {
@@ -17,9 +21,14 @@ export class UsersRepository extends Repository<User> {
 
       const user = this.create({ username, password: hashed });
 
-      await this.save(user);
+      const savedUser = await this.save(user);
+
+      return savedUser;
     } catch (e) {
-      this.logger.error(`Failed to create user with username ${username}`, e.stack);
+      this.logger.error(
+        `Failed to create user with username ${username}`,
+        e.stack,
+      );
 
       const errors = { 23505: 'A user with the same username already exists' };
 
