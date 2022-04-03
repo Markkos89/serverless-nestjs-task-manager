@@ -28,25 +28,10 @@ functions:
           path: /
           cors:
             origin: '*' # <-- Specify allowed origin
-            headers: # <-- Specify allowed headers
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-            allowCredentials: false
 
       - http:
           method: ANY
           path: '{proxy+}'
           cors:
             origin: '*' # <-- Specify allowed origin
-            headers: # <-- Specify allowed headers
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-            allowCredentials: false
+
