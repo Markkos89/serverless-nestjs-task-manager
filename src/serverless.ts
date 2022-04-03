@@ -12,10 +12,10 @@ let server: Handler;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
   // app.use(cookieParser());
   app.useGlobalInterceptors(new TransformInterceptor());
-
   await app.init();
 
   const expressApp = app.getHttpAdapter().getInstance();
