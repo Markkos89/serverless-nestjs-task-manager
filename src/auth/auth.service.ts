@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { UsersRepository } from './users.repository';
@@ -8,13 +8,18 @@ import { JwtPayload } from './jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectRepository(UsersRepository) private usersRepository: UsersRepository, private jwtService: JwtService) { }
+  constructor(
+    @InjectRepository(UsersRepository) private usersRepository: UsersRepository,
+    private jwtService: JwtService,
+  ) {}
 
   async signUp(dto: AuthCredentialsDto): Promise<void> {
     return this.usersRepository.createUser(dto);
   }
 
-  async signIn(dto: AuthCredentialsDto): Promise<{ access_token: string; }> {
+  async signIn(
+    dto: AuthCredentialsDto,
+  ): Promise<{ access_token: string; user: object }> {
     const { username, password } = dto;
 
     const user = await this.usersRepository.findOne({ username });
@@ -22,9 +27,17 @@ export class AuthService {
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload: JwtPayload = { username };
       const access_token: string = this.jwtService.sign(payload);
-      return { access_token };
+      const { password, ...cleanUser } = user;
+      return { user: cleanUser, access_token };
     }
 
-    throw new UnauthorizedException('Invalid credentials');
+    throw new HttpException(
+      {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: ['Invalid credentials'],
+        error: 'Bad Request',
+      },
+      HttpStatus.BAD_REQUEST,
+    );
   }
 }
